@@ -93,13 +93,17 @@ class BlueskyService {
           .toBuffer();
       }
 
+      // Convert Buffer to Uint8Array to ensure compatibility with fetch
+      const imageUint8Array = new Uint8Array(processedImage);
+
       // Upload to Bluesky
-      const uploadResponse = await agent.uploadBlob(processedImage, {
+      const uploadResponse = await agent.uploadBlob(imageUint8Array, {
         encoding: 'image/jpeg'
       });
 
       return uploadResponse.data;
     } catch (error) {
+      console.error('Image upload error details:', error);
       throw new Error(`Image upload failed: ${error.message}`);
     }
   }
